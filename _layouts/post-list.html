@@ -1,0 +1,79 @@
+---
+layout: default
+---
+{% if site.posts %}
+{% if page.url != site-home %}
+<header>
+	<h1 class="page-title screen-reader-text">{{ page.title }}</h1>
+</header>
+{% endif %}
+
+
+
+{% for post in site.post %}
+  {% if post.sticky %}
+  <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <header class="entry-header">
+        <span class="sticky-post">Featured</span>
+
+      <h2 class="entry-title"><a href="{{ post.url }}" rel="bookmark">{{ post.title }}</a></h2>
+    </header><!-- .entry-header -->
+
+    {{ post.excerpt }}
+
+    <img src="{{ post.thumbnail }}" alt="">
+
+    <div class="entry-content">
+      <?php
+        /* translators: %s: Name of current post */
+        the_content( sprintf(
+          __( '', 'twentysixteen' ),
+          get_the_title()
+        ) );
+        {% unless post.excerpt==post.content %}
+          Continue reading<span class="screen-reader-text">{{ post.title }}</span>
+        {% endunless %}
+
+        wp_link_pages( array(
+          'before'      => '<div class="page-links"><span class="page-links-title">' . __( 'Pages:', 'twentysixteen' ) . '</span>',
+          'after'       => '</div>',
+          'link_before' => '<span>',
+          'link_after'  => '</span>',
+          'pagelink'    => '<span class="screen-reader-text">' . __( 'Page', 'twentysixteen' ) . ' </span>%',
+          'separator'   => '<span class="screen-reader-text">, </span>',
+        ) );
+      ?>
+    </div><!-- .entry-content -->
+
+    <footer class="entry-footer">
+      <?php twentysixteen_entry_meta(); ?>
+<span class="edit-link"><a href="">Edit<span class="screen-reader-text">{{ post.title }}</span></a></span>
+    </footer><!-- .entry-footer -->
+  </article><!-- #post-## -->
+
+  {% endif %}
+{% endfor %}
+
+
+
+
+// Previous/next page navigation.
+the_posts_pagination( array(
+	'prev_text'          => __( 'Previous page', 'twentysixteen' ),
+	'next_text'          => __( 'Next page', 'twentysixteen' ),
+	'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentysixteen' ) . ' </span>',
+) );
+
+// If no content, include the "No posts found" template.
+{% else %}
+<section class="no-results not-found">
+	<header class="page-header">
+		<h1 class="page-title"><?php _e( 'Nothing Found', 'twentysixteen' ); ?></h1>
+	</header><!-- .page-header -->
+
+	<div class="page-content">
+			<p><?php _e( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'twentysixteen' ); ?></p>
+			<?php get_search_form(); ?>
+	</div><!-- .page-content -->
+</section><!-- .no-results -->
+{% endif %}

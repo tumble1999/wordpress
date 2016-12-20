@@ -1,0 +1,25 @@
+---
+layout: default
+sidebar-content-bottom: true
+---
+<article id="post-{{ page.id }}" class="{{ page.class }}">
+	<header class="entry-header">
+		<h1 class="entry-title">{{ page.title }}</h1>
+	</header><!-- .entry-header -->
+	{% if page.thumbnail %}
+	<img src="{{ page.thumbnail }}" alt="">
+	{% endif %}
+
+	<div class="entry-content">
+		<p>{{ content }}</p>
+	</div><!-- .entry-content -->
+	<footer class="entry-footer">
+		<span class="edit-link">
+			Edit
+			<span class="screen-reader-text">
+				{{ page.title }}
+			</span>
+		 </span>
+	 </footer><!-- .entry-footer -->
+
+</article><!-- #post-## -->

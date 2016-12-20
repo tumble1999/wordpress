@@ -1,0 +1,74 @@
+{% assign menu = null  %}
+{% comment %}
+IMPORT PARAMETERS
+theme_location
+menu
+container=div
+container_class=menu-{menu slug}-container
+container_id
+menu_class=menu
+menu_id
+fallback_cb=wp_page_menu
+before
+after
+link_before
+link_after
+items_wrap=<ul id=\"%1$s\" class=\"%2$s\">%3$s</ul>
+depth=0
+walker
+{% endcomment %}
+{% capture theme_location %}{{ include.theme_location}}{% endcapture %}
+{% if include.menu %}
+  {% assign menu = include.menu %}
+{% else %}
+{% for dataFile in site.data.menus %}
+  {% unless menu %}
+    {% if dataFile[1].location == include.theme_location %}
+      {% assign menu = dataFile[1] %}
+    {% endif %}
+  {% endunless %}
+{% endfor %}
+{% endif %}
+
+
+<!--
+INCLUDE PARAMERTERS
+include.theme_location: {{ include.theme_location }}
+include.menu:
+  include.menu.title: {{ include.menu.title }}
+  include.menu.location: {{ include.menu.location }}
+  include.menu.items:
+  {% for item in include.menu.items %}  - include.menu.items[{{ forloop.index }}].name: {{item.name }}
+      include.menu.items[{{ forloop.index }}].href: {{ item.href }}
+  {% endfor %}
+
+
+MENU FILE:
+menu.title: {{ menu.title }}
+menu.location: {{ menu.location }}
+menu.items:
+{% for item in menu.items %}  - menu.items[{{ forloop.index }}].name: {{item.name }}
+    menu.items[{{ forloop.index }}].href: {{ item.href }}
+{% endfor %}
+
+-->
+
+{% capture container %}{{ include.container | default: "div" }}{% endcapture %}
+{% capture container_class %}{% if include.container_class %}{{ include.container_class }}{% else %}menu-{{ menu.slug }}-container{% endif %}{% endcapture %}
+{% capture container_id %}{{ include.container_id }}{% endcapture %}
+{% capture menu_class %}{{include.menu_class | default: "menu" }}{% endcapture %}
+{% capture menu_id %}{{ include.menu_id }}{% endcapture %}
+{% capture before %}{{ include.before }}{% endcapture %}
+{% capture after %}{{ include.after }}{% endcapture %}
+{% capture link_before %}{{ include.link_before }}{% endcapture %}
+{% capture link_after %}{{ include.link_after }}{% endcapture %}
+{% capture depth %}{{ include.depth | default: 0 }}{% endcapture %}
+{% capture walker %}{{ include.walker }}{% endcapture %}
+
+<{{ container }} class="{{ container_class }}" id="{{ container_id }}">
+  <ul id="{{ menu_id }}" class="{{ menu_class }}">
+    {% for item in menu.items %}
+    <li id="menu-item-{{ forloop.index }}" class="menu-item menu-item-type-custom menu-item-object-custom {% if page.url == item.href %}current-menu-item current_page_item{% endif %} menu-item-{{ forloop.index }}">{{ before }}<a href="{{ item.href }}">{{ link_before }}{{ item.name }}{{ link_after }}</a>{{ after }}</li>
+    {% endfor %}
+  </ul>
+</{{ container }}>

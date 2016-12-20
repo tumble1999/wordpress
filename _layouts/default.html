@@ -1,0 +1,16 @@
+---
+layout: null
+---
+{% include header.html %}
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+      {{ content }}
+		</main><!-- .site-main -->
+    {% if page.sidebar-content-bottom==true %}
+        {% include sidebar-content-bottom.html %}
+    {% endif %}
+	</div><!-- .content-area -->
+
+{% include sidebar.html %}
+{% include footer.html %}

@@ -1,0 +1,35 @@
+{% assign widgets = null %}
+{% comment %}
+IMPORT PARAMETERS
+name
+id
+class
+container
+title_containter
+{% endcomment %}
+
+
+<!--
+INCLUDE PARAMERTERS
+include.theme_location: {{ include.name }}
+
+<section id="text-1" class="widget widget_text">
+<h2 class="widget-title">Text Widget</h2>
+<div class="textwidget">This is a text widget. The Text Widget allows you to add text or HTML to your sidebar. You can use a text widget to display text, links, images, HTML, or a combination of these. Edit them in the Widget section of the <a href="https://wordpress.com/customize/">Customizer</a>.</div>
+		</section>
+
+-->
+
+{% assign widgets = site.data.widgets.[include.name] %}
+{% capture container %}{{ include.before_widget | default: "li" }}{% endcapture %}
+{% capture title_container %}{{ include.before_title | default: "h2" }}{% endcapture %}
+
+{% for dataFile in widgets %}
+{% assign widget = dataFile[1] %}
+<{{ container }} id="{{ widget.type }}-{{ forloop.index }}" class="widget widget_{{ widget.type }}">
+  <{{ title_container }} class="widget-title">{{ widget.title }}</{{ title_container }}>
+  <div class="{{ widget.type }}widget">
+{% include widgets/[widget.type].md %}
+  </div>
+</{{ container }}>
+{% endfor %}
